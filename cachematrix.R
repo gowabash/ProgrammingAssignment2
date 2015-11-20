@@ -1,15 +1,40 @@
-## Put comments here that give an overall description of what your
-## functions do
+## object to contain matrix and it's 
+## inverse (if computed)
 
-## Write a short comment describing this function
+makeCacheMatrix <- function(actual = matrix()) {
+  inverse <- NULL
+  set <- function(x) {
+    actual <<- x
+    inverse <<- NULL
+  }
+  get <- function() {
+    actual
+  }
 
-makeCacheMatrix <- function(x = matrix()) {
-
+  setInverse <- function(i) {
+    inverse <<- i
+  }
+  getInverse <- function() {
+    inverse
+  }
+  list(set = set, get = get,
+             setInverse = setInverse,
+             getInverse = getInverse)
 }
 
-
-## Write a short comment describing this function
+## method to get inverse.  If not computed,
+## it will stor it in cache.  If previously
+## computed, it will use cache
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inverse <- x$getInverse()
+
+  if (is.null(inverse)) {
+    actual <- x$get()
+    if (dim(actual)[1] == dim(actual)[2]) {
+      inverse <- solve(actual)
+      x$setInverse(inverse)
+    }
+  }
+  inverse 
 }
